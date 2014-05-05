@@ -1,0 +1,6 @@
+Coverage Manager
+
+1.Dependancies: Python 2.7, pyexpect, Flask-Login
+
+TODO:
+Script to setupt Flask-Login from scratch

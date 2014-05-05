@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<h2>Enter basic details</h2>
+
+{% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+
+{% if not session.cov_type_set %}
+ <form action="{{ url_for('cov_select') }}" method=post>
+     <div class="cov_type">
+         <h4>Select project</h4>
+         <select name=proj_select>
+             <option value=Owl>Owl</option>
+             <option value=Artemis>Artemis</option>
+             <option value=Atlas>Atlas</option>
+             <option value=Apollo>Apollo</option>
+             <option value=Pelican>Pelican</option>
+         </select>
+            <h4>Select type of coverage data:</h4>
+            <input type=radio name=cov_type value="f" checked >Functional Coverage<br><!--fcov-->
+            <input type=radio name=cov_type value="c">Code Coverage<!--ccov-->
+            <br>
+        </div>
+        <div class="cov_path">
+           <h4>Give path for the coverage files:</h4>
+           <input type=text name=cov_path size=100>
+           <p>Please provide absolute path</p>
+           <input type=submit value=Select>
+       </div>
+   </form>
+
+ {% else %}
+ <p>Setting project to <strong>{{ p_user }}</strong>, project code = {{ p_code }}
+     <p>You have selected {{ cov_type_s}}</p>
+     <p>Path selected:<br> {{ cov_path_ip }}</p>
+     <form action={{url_for('cov_sel_confirm') }} method=post>
+         <button type=submit name=next_to value=-1>Back</button>
+         <button type=submit name=next_to value=1>Continue</button>
+</form>
+
+{% endif %}
+
+{% endblock %}
