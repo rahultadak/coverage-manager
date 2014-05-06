@@ -83,7 +83,7 @@ class CoverageFunc:
                     self.ucdb_list[ (i*self.size) : ((i+1)*self.size) ])))
             self.f1.append('#' + str(i+1) + '\n' + constants.vcover + \
                     constants.merge_file.format(l,l,i) + ucdbs[i] + \
-                    '| tee ' + constants.merge_file.format(l,l,i)) + '\n'
+                    '| tee ' + constants.merge_file.format(l,l,i))
 
         return self.f1
 
