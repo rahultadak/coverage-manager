@@ -3,6 +3,7 @@ import constants
 from flask_login import UserMixin
 import pexpect
 from pwd import getpwnam
+from math import ceil
 
 class User(UserMixin):
 
@@ -44,6 +45,11 @@ class CoverageFunc:
     covtype = ''
     ucdb_list = [] 
     ucdb_no = 0
+    size = 0
+
+    #TODO debug
+    f1 = []
+    i1 = 0
     """Use f for functional and c for code ? TODO"""
 
     def __init__(self, path, covtype):
@@ -58,14 +64,28 @@ class CoverageFunc:
         for f in full_list:
             if not f.startswith('.'):
                 if f.endswith('ucdb'):
-                    self.ucdb_list.append(f)
+                    self.ucdb_list.append(str(f))
                     self.ucdb_no = len(self.ucdb_list)
 
     def merge_ucdb(self):
         if self.covtype == 'f':
             self.size = constants.FCOV_GROUP
-        else:
+        elif self.covtype == 'c':
             self.size = constants.CCOV_GROUP
+        return self.cmd_file_gen(0)
+
+    def cmd_file_gen(self,l):
+        #Number of l# merges
+        ucdbs = []
+        self.i1 = int(ceil(float(self.ucdb_no) / float(self.size)))
+        for i in range(self.i1):
+            ucdbs.append(' '.join(map(str, \
+                    self.ucdb_list[ (i*self.size) : ((i+1)*self.size) ])))
+            self.f1.append('#' + str(i+1) + '\n' + constants.vcover + \
+                    constants.merge_file.format(l,l,i) + ucdbs[i] + \
+                    '| tee ' + constants.merge_file.format(l,l,i)) + '\n'
+
+        return self.f1
 
 """This class sets up Project attributes"""
 class Proj_Attr:

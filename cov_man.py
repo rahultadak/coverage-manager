@@ -14,16 +14,19 @@ import constants
 #App setup
 app = Flask(__name__)
 
-#login manager setup
-login_manager = LoginManager()
-login_manager.init_app(app)
-
 #TODO
 #Clear Debug, and set secret key to random
 app.config.update(dict(
     DEBUG=True,
     SECRET_KEY='dev_key',
+    LOGIN_DISABLED=True,
+    TESTING=True,   #TODO remove when deploying
 ))
+
+#login manager setup
+login_manager = LoginManager()
+
+login_manager.init_app(app)
 
 #login_manager.login_view = "users.login"
 
@@ -42,11 +45,13 @@ following link for more details:
 http://stackoverflow.com/questions/12075535/flask-login-cant-understand-how-it-works """
 @login_manager.user_loader
 def load_user(id):
+    return None
+#TODO remove afetr testing
 #_fresh flag is set when the user has logged in and it was a success
-    if not '_fresh' or '_fresh' not in session:
-        return None
-    else:
-        return user_in
+#    if not '_fresh' or '_fresh' not in session:
+#        return None
+#    else:
+#        return user_in
 
 
 @app.route('/')
@@ -98,8 +103,9 @@ def unauthorized():
     return render_template('un_auth.html')
 
 @app.route('/select', methods=['GET','POST'])
+#@login_required
+
 #after login is properly done redirect to this url, 
-@login_required
 def cov_select():
     error = None
     global cov_type, cov_path, p_user
@@ -138,9 +144,12 @@ def cov_sel_confirm():
             p_code=p_user.p_code)
 
 @app.route('/to_do')
+@login_required
 def sel_opt():
     run = CoverageFunc(path=cov_path,covtype=cov_type)
+    print run.merge_ucdb()
     return render_template('opt_list.html',ucdb_no = run.ucdb_no)
+
 #OS.Error when server restarted, need to deal with it? TODO
 
 if __name__ == '__main__':

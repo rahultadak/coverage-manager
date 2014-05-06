@@ -17,7 +17,10 @@ proj_list = {   'Owl'       : 'pj00426',
                 'Pelican'   : 'pj',
             }
 
-bs_cmd = 'bsub -o <log> -J <sometin> -R "select [(rhe5||rhe6) && os64]"'
+bs_cmd = 'bsub -o {}bsub_log -J {} -R "select [(rhe5||rhe6) && os64]" -M {} \
+        -W {} '
+vcover = 'vcover -64 -out '
+merge_file = 'merge_l{}/merge_l{}_file{} '
 
 FCOV_GROUP = 50
 CCOV_GROUP = 25
