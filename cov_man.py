@@ -45,13 +45,13 @@ following link for more details:
 http://stackoverflow.com/questions/12075535/flask-login-cant-understand-how-it-works """
 @login_manager.user_loader
 def load_user(id):
-    return None
+#    return None
 #TODO remove afetr testing
 #_fresh flag is set when the user has logged in and it was a success
-#    if not '_fresh' or '_fresh' not in session:
-#        return None
-#    else:
-#        return user_in
+    if not '_fresh' or '_fresh' not in session:
+        return None
+    else:
+        return user_in
 
 
 @app.route('/')
@@ -103,7 +103,7 @@ def unauthorized():
     return render_template('un_auth.html')
 
 @app.route('/select', methods=['GET','POST'])
-#@login_required
+@login_required
 
 #after login is properly done redirect to this url, 
 def cov_select():
@@ -143,13 +143,25 @@ def cov_sel_confirm():
             cov_path_ip=cov_path,p_user=p_user.p_name, \
             p_code=p_user.p_code)
 
-@app.route('/to_do')
+@app.route('/to_do',methods=['GET','POST'])
 @login_required
 def sel_opt():
-    run = CoverageFunc(path=cov_path,covtype=cov_type)
-    print run.merge_ucdb()
-    return render_template('opt_list.html',ucdb_no = run.ucdb_no)
+    global run
+    if request.method == 'GET':
+        run = CoverageFunc(path=cov_path,covtype=cov_type,user= user_in)
+        return render_template('opt_list.html',ucdb_no = run.ucdb_no)
+    
+    else:
+        merge_goto = request.form['merge_goto']
+        if int(merge_goto)==1:
+            run.merge_ucdb(p_user.p_code)
+            return render_template('merge_done.html')
 
+
+@app.route('/merge')
+@login_required
+def merge_page():
+    return render_template('merge_done.html')
 #OS.Error when server restarted, need to deal with it? TODO
 
 if __name__ == '__main__':

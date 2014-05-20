@@ -17,11 +17,10 @@ proj_list = {   'Owl'       : 'pj00426',
                 'Pelican'   : 'pj',
             }
 
-bs_cmd = 'bsub -o {}bsub_log -J {} -R "select [(rhe5||rhe6) && os64]" -M {} \
-        -W {} '
-vcover = 'vcover -64 -out '
-merge_file = 'merge_l{}/merge_l{}_file{} '
-
+bs_cmd = "bsub -o {}cov_bsub_log -J '{}cov_web_app[1-{}]' -R \"select[(rhe5||rhe6) && os64]\" -M {} -W {} -P {} "
+vcover_m = 'vcover -64 merge -out '
+merge_file = 'merge_l{}/merge_l{}_file{}'
+tmp_dir = '/arm/scratch/rahtad01/tmp_files/'
 FCOV_GROUP = 50
 CCOV_GROUP = 25
 

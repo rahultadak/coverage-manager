@@ -1,0 +1,15 @@
+coverage-manager
+================
+
+Web app for management and report generation of coverage
+
+
+1. In constants change tmp_files directory
+2. Make sure that the directory is read write permitted
+
+3.User should make coverage directory readeable and executable by anyone.
+
+4. Checkout the generic directory
+5. Add it to the path : Make a generic bin directory and link this file inside the directory
+syntax : "set path = ($path /path/to/dir1)"
+
