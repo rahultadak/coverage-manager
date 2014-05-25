@@ -7,9 +7,11 @@ from flask_login import LoginManager, login_required, login_user, \
 
 from os import path
 from pwd import getpwnam
+import thread
 #User classes
 from user_classes import User, CoverageFunc, Proj_Attr
 import constants
+from time import sleep
 
 #App setup
 app = Flask(__name__)
@@ -108,12 +110,19 @@ def unauthorized():
 #after login is properly done redirect to this url, 
 def cov_select():
     error = None
-    global cov_type, cov_path, p_user
+    global cov_type, cov_path, p_user, rm_old
     session.pop('cov_type_set', None)
     if request.method == 'POST':
         cov_type = request.form['cov_type']
         cov_path = request.form['cov_path']
         p_inp = request.form['proj_select']
+
+        #TODO need to fix this to take rm_old as input
+        rm_old=request.form['rm_old']
+        #if request.form['rm_old']:
+        #    rm_old = request.form['rm_old']
+        #else:
+        #    rm_old=0
 
         if not path.exists(cov_path):
             error = 'Invalid path given, please check path'
@@ -153,16 +162,29 @@ def sel_opt():
     
     else:
         merge_goto = request.form['merge_goto']
-        if int(merge_goto)==1:
-            run.merge_ucdb(p_user.p_code)
-            return render_template('merge_done.html')
 
+        if int(merge_goto)==1:
+            thread.start_new_thread(run.merge_ucdb,(p_user.p_code,rm_old,))
+            return redirect(url_for('merge_page'))
 
 @app.route('/merge')
 @login_required
 def merge_page():
-    return render_template('merge_done.html')
+    sleep(3)
+    return render_template('merge_done.html',level=run.level,jobid=run.jobid \
+            ,jobs_done=run.jobs_done,jobs_submitted=run.jobs_submitted, \
+            exit_code=run.exit_code)
 #OS.Error when server restarted, need to deal with it? TODO
+
+@app.route('/merge_failed')
+@login_required
+def merge_fail():
+    return render_template('merge_fail.html')
+
+@app.route('/merge_passed')
+@login_required
+def merge_pass():
+    return render_template('merge_pass.html')
 
 if __name__ == '__main__':
     app.run()

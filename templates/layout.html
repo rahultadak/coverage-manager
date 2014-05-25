@@ -6,8 +6,9 @@
     <h1>Coverage Manager</h1>
   {% if session._fresh %}    
     <div class=metanav>
-    <p> {{ session.real_name }}
-    <a href="{{ url_for('logout') }}">log out</a>
+        <p> {{ session.real_name }}  
+        <a href="{{ url_for('cov_select') }}">Selection Page</a>  
+    <a href="{{ url_for('logout') }}">Log Out</a> 
     </p>
 </div>
   {% endif %}  

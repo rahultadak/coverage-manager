@@ -1,9 +1,11 @@
 {% extends "layout.html" %}
 {% block body %}
 
-<h4>This will have what to do next</h4>
-<p> Here you should have the options for the user what to do</p>
-<p>Number of ucdb's found = {{ ucdb_no }}<p>
-
+<p>Number of ucdb's found = {{ ucdb_no }}<p> 
+<p>If you want to only merge the files in the directory,<br>
+Hit the 'Merge!' button</p>
+<form action={{url_for('sel_opt') }} method=post>
+    <button type=submit name=merge_goto value=1>Merge!</button>
+</form>
 {% endblock %}
 

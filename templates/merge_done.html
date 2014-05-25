@@ -1,7 +1,31 @@
 {% extends "layout.html" %}
 {% block body %}
+<script>
+    function AutoRefresh(t) {
+        setTimeout("location.reload(true);",t);
+    }
 
-<h4>This will have what to do next</h4>
-<p>Merge completed</p>
+    function redirect(x) {
+        if (x == 127) {
+            window.location.replace("{{ url_for('merge_fail') }}");
+        }
+        else if (x == 1) {
+            window.location.replace("{{ url_for('merge_pass') }}");
+        }
+    }
+</script>
+
+<h4>Merge Started</h4>
+<p id='level'>Merge level {{ level }} under process.</p>
+<p>Job ID issued : {{ jobid }}</p>
+<p>Job Status : {{ jobs_done }} of {{ jobs_submitted }} completed.</p>
+<p>{{ exit_code }} </p>
+
+{% if exit_code != 0 %}
+    <body onload="redirect({{ exit_code }});">
+{% elif exit_code == 0 %}
+    <body onload="AutoRefresh(2000);">        
+{% endif %}
+
 {% endblock %}
 

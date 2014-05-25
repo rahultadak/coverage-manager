@@ -21,6 +21,7 @@ bs_cmd = "bsub -o {}cov_bsub_log -J '{}cov_web_app[1-{}]' -R \"select[(rhe5||rhe
 vcover_m = 'vcover -64 merge -out '
 merge_file = 'merge_l{}/merge_l{}_file{}'
 tmp_dir = '/arm/scratch/rahtad01/tmp_files/'
+#TODO replace fcov_group value to 50 after testing
 FCOV_GROUP = 50
 CCOV_GROUP = 25
 
