@@ -21,8 +21,6 @@ app = Flask(__name__)
 app.config.update(dict(
     DEBUG=True,
     SECRET_KEY='dev_key',
-    LOGIN_DISABLED=True,
-    TESTING=True,   #TODO remove when deploying
 ))
 
 #login manager setup
@@ -61,8 +59,9 @@ def go_to():
     if not '_fresh' or '_fresh' not in session:
         return redirect(url_for('login'))
     else:
-        return redirect(url_for('cov_select'))
-
+        session.pop('_fresh',None) 
+        return redirect(url_for('go_to'))
+         
 #Login Page
 @app.route('/login', methods=['GET','POST'])
 def login():
@@ -73,21 +72,27 @@ def login():
     if request.method == 'POST':
 
         #Setting up user object
-        user_in = User(username=request.form['username'])
+        try:
+            getpwnam(request.form['username'])
+        except KeyError:
+            error = 'Illegal Username given. Try again.'
+            return render_template('login.html',error = error)
+        else:
+            user_in = User(username=request.form['username'])
 
         #authenticating the user
         user_auth=user_in.authenticate(request.form['password'])
 
         if user_auth == 1:
-            k = login_user(user_in)
+            k = login_user(user_in,remember=True)
 
             if k==True:
                 flash("Logged in successfully.")
                 session['real_name'] = current_user.first_name()
                 return redirect(url_for('cov_select'))
 
-        else:
-            error = request.form['error']
+        elif user_auth == 0:
+            error = 'The password given is wrong. Try again.'
             return render_template('login.html',error = error)
 
     return render_template('login.html',error = None)
@@ -106,7 +111,6 @@ def unauthorized():
 
 @app.route('/select', methods=['GET','POST'])
 @login_required
-
 #after login is properly done redirect to this url, 
 def cov_select():
     error = None

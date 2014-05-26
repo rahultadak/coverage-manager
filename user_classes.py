@@ -3,7 +3,7 @@ import constants
 from flask import render_template
 from flask_login import UserMixin
 import pexpect
-from pwd import getpwnam
+from pwd import getpwnam, getpwall
 from math import ceil
 import re
 
@@ -13,7 +13,7 @@ class User(UserMixin):
 
     def __init__(self,username):
         self.username = username
-        
+         
     def authenticate(self,pswd):
         self.pswd = pswd
         auth = pexpect.spawn('su ' + self.username)
