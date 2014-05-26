@@ -2,14 +2,28 @@ coverage-manager
 ================
 
 Web app for management and report generation of coverage
+***Always run the tool in production cluster only!***
 
+1. In constants change tmp_files directory to an existing directory
+2. Make sure that the tmp_files directory is read write permitted
 
-1. In constants change tmp_files directory
-2. Make sure that the directory is read write permitted
+4. Checkout the generic directory for the array_runner file. This file alone is also enough
+syntax: "svn co http://cam-svn2.cambridge.arm.com/svn/ippd/cpudv/suites/generic/tags/generic_WW_49_13_RC1/tools/bin"
+5. Add it to the path : Make a local bin directory and link this file inside the directory
+syntax: "set path = ($path /path/to/dir1)"
 
-3.User should make coverage directory readeable and executable by anyone.
+=================
+Requires Modules:
+=================
+ python/python/2.7                                 
+ flask/flask-2.7/0.96                              
+ python/jinja2-2.7/2.6                             
+ python/werkzeug-2.7/0.8.3                         
+ python/tornado_py2.7/3.2                          
+ python/backports.ssl_match_hostname_py2.7/3.4.0.2
 
-4. Checkout the generic directory
-5. Add it to the path : Make a generic bin directory and link this file inside the directory
-syntax : "set path = ($path /path/to/dir1)"
-
+=====
+TODO:
+=====
+1. Need to add support for project based mentor version loading
+2. Reporting functionality?

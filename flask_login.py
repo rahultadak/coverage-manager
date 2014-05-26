@@ -754,8 +754,6 @@ def login_required(func):
         if current_app.login_manager._login_disabled:
             return func(*args, **kwargs)
         elif not current_user.is_authenticated():
-            print 'user not authenticated'
-            print current_user.is_authenticated()
             return current_app.login_manager.unauthorized()
         return func(*args, **kwargs)
     return decorated_view

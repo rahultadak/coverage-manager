@@ -1,4 +1,4 @@
-body            { font-family: sans-serif; background: #eee; }
+body            { font-family: sans-serif; background: #eee; height: 100%; }
 a, h1, h2       { color: #377BA8; }
 h1, h2          { font-family: 'Georgia', fantasy; margin: 0; }
 h1              { border-bottom: 2px solid #eee; }
@@ -11,8 +11,17 @@ h2              { font-size: 1.2em; }
 .entries li h2  { margin-left: -1em; }
 .add-entry      { font-size: 0.9em; border-bottom: 1px solid #ccc; }
 .add-entry dl   { font-weight: bold; }
-.metanav        { text-align: right; font-size: 0.8em; padding: 0.3em;
+.metanav        { text-align: right; font-size: 0.8em; padding: 0.1em;
                   margin-bottom: 1em; background: #fafafa; }
-.flash          { background: #CEE5F5; padding: 0.5em;
+.flash          { background: #CEE5F5; padding: 0.3em;
                   border: 1px solid #AACBE2; }
 .error          { background: #F0D6D6; padding: 0.5em; }
+footer {
+    font-weight: bold; 
+    font-size:0.7em;
+    position:relative;
+    width:100%;
+    bottom:0;
+    text-align: center;
+}
+

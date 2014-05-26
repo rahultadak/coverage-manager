@@ -19,8 +19,8 @@ app = Flask(__name__)
 #TODO
 #Clear Debug, and set secret key to random
 app.config.update(dict(
-    DEBUG=True,
-    SECRET_KEY='dev_key',
+    DEBUG=False,
+    SECRET_KEY='\x93$\xbeM\x88sV\xe1\xf0\x03G\xd8M\x9dlE\xf8dC2\xa0\x1f%\xb7',
 ))
 
 #login manager setup
