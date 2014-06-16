@@ -12,6 +12,7 @@ import thread
 from user_classes import User, CoverageFunc, Proj_Attr
 import constants
 from time import sleep
+import pexpect
 
 #App setup
 app = Flask(__name__)
@@ -114,23 +115,19 @@ def unauthorized():
 #after login is properly done redirect to this url, 
 def cov_select():
     error = None
-    global cov_type, cov_path, p_user, rm_old
+    global cov_type, cov_path, p_user, rm_toggle
     session.pop('cov_type_set', None)
     if request.method == 'POST':
         cov_type = request.form['cov_type']
         cov_path = request.form['cov_path']
         p_inp = request.form['proj_select']
 
-        #TODO need to fix this to take rm_old as input
-        rm_old=request.form['rm_old']
-        #if request.form['rm_old']:
-        #    rm_old = request.form['rm_old']
-        #else:
-        #    rm_old=0
-
         if not path.exists(cov_path):
             error = 'Invalid path given, please check path'
             return render_template('entry.html',error=error)
+
+        #TODO need to fix this to take rm_old as input
+        rm_toggle=request.form['rm_old']
 
         p_user = Proj_Attr(p_name=p_inp)
 
@@ -147,8 +144,11 @@ def cov_sel_confirm():
     
     if request.method == 'POST':
         next_to = request.form['next_to']
+
         if int(next_to) == 1:
+
             return redirect(url_for('sel_opt'))
+
         elif int(next_to) == -1:
             return redirect(url_for('cov_select'))
 
@@ -168,7 +168,7 @@ def sel_opt():
         merge_goto = request.form['merge_goto']
 
         if int(merge_goto)==1:
-            thread.start_new_thread(run.merge_ucdb,(p_user.p_code,rm_old,))
+            thread.start_new_thread(run.merge_ucdb,(p_user.p_code,rm_toggle,))
             return redirect(url_for('merge_page'))
 
 @app.route('/merge')

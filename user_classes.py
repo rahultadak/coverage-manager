@@ -77,7 +77,7 @@ class CoverageFunc:
 
         return ucdb_list
 
-    def merge_ucdb(self,p_code,rm_toggle=0):
+    def merge_ucdb(self,p_code,rm_toggle):
         if self.covtype == 'f':
             self.size = constants.FCOV_GROUP
             self.mem = constants.FCOV_MEM
@@ -220,6 +220,7 @@ class CoverageFunc:
     
         #Initialising vars
         pending = 1
+        running = 1
         exited = 0
 
         wait_chk = pexpect.spawn('su ' + self.user.username)
@@ -227,7 +228,7 @@ class CoverageFunc:
         wait_chk.sendline(self.user.pswd)
         wait_chk.expect('.*')
 
-        while (pending != 0 & exited == 0):
+        while ((pending+running) != 0 & exited == 0):
             wait_chk.sendline('bjobs -A ' + self.jobid)
             wait_op = wait_chk.expect(['not found','PSUSP'])
                
@@ -239,10 +240,10 @@ class CoverageFunc:
             wait_chk.sendline('echo marker')
             wait_chk.expect('marker')
             wait_op = wait_chk.before.split()
-            
             self.jobs_submitted = int(wait_op[3])
             self.jobs_done = int(wait_op[5])
             pending = int(wait_op[4])
+            running = int(wait_op[6])
             exited = int(wait_op[7])
 
             sleep(3)
