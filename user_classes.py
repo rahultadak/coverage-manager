@@ -96,6 +96,7 @@ class CoverageFunc:
             rm_old.expect('word:')
             rm_old.sendline(self.user.pswd)
             rm_old.expect('.*')
+            rm_old.sendline('cd ' + self.path)
             rm_old.sendline('rm -rf cmds_l* merge_l* fcov_bsub_log \
                     ccov_bsub_log')
             rm_old.expect('.*')
@@ -119,18 +120,14 @@ class CoverageFunc:
                 ucdb_list = self.list_ucdbs(self.path \
                         + '/merge_l{}'.format(self.level-1))                
 
-
             self.cmd_file_gen(self.level,ucdb_list,cnt) 
             self.submit_merge(self.level,cnt,p_code)
             exit_c = self.wait_merge()
             if exit_c == 127:
                 self.exit_code = 127
-                print self.exit_code
                 return self.exit_code
         
         self.exit_code = 1
-        print 'exit_code'
-        print self.exit_code
         return self.exit_code
 
     def cmd_file_gen(self,l,ucdb_list,cnt):
@@ -139,10 +136,10 @@ class CoverageFunc:
         ucdbs = []
         cmd_str = ''
 
-        for i in range(cnt):
-            if l > 0:
-                ucdb_list = ['merge_l{}/'.format(l-1) + e for e in ucdb_list]
+        if l > 0:
+            ucdb_list = ['merge_l{}/'.format(l-1) + e for e in ucdb_list]
 
+        for i in range(cnt):
             ucdbs.append((' ').join(map(str, \
                     ucdb_list[ (i*self.size) : ((i+1)*self.size) ])))
 
